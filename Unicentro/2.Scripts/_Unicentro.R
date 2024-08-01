@@ -9,7 +9,7 @@ g <- gc(reset = T); rm(list = ls())
 options(warn = -1, scipen = 999)
 suppressMessages(library(pacman))
 suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, foreign, ggcharts, mdthemes,forcats,
-                                raster, geodata, terra, sf, sp, lubridate))
+                                readxl, raster, geodata, terra, sf, sp, lubridate))
 
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
 prj <- "Unicentro"
@@ -536,7 +536,7 @@ db <- db %>% dplyr::mutate(P61_7 = dplyr::case_when(P61_7	%in% c("Sí")	~	"Prens
 db <- db %>% dplyr::mutate(P61_8 = dplyr::case_when(P61_8	%in% c("Sí")	~	"Publicidad exterior",
                                                     TRUE ~ NA))
 # Analisis descriptivo ----------------------------------------------------
-# Pregunta 60 -------------------------------------------------------------
+# Pregunta 6 -------------------------------------------------------------
 Pr0 <- db %>% dplyr::select(SEL)
 Pr0 %>% glimpse
 # Analisis descriptivo
