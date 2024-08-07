@@ -8,13 +8,13 @@
 g <- gc(reset = T); rm(list = ls())
 options(warn = -1, scipen = 999)
 suppressMessages(library(pacman))
-suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, foreign, ggcharts, mdthemes,forcats,
+suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, ggrepel, foreign, ggcharts, mdthemes,forcats,
                                 readxl, raster, geodata, terra, sf, sp, lubridate))
 
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
 prj <- "Unicentro"
 # Lectura de datos --------------------------------------------------------
-db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Base_Final_15.07.2024.sav"),
+db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Base_Final_Centro_Comercial.sav"),
                          use.value.labels = T,
                          to.data.frame = T)
 head(db)
@@ -23,7 +23,7 @@ head(db)
 # Re clasificacion de variables -------------------------------------------
 # 8 -------------------------------------------------------------------------
 db <- db %>% dplyr::mutate(P8_1 = dplyr::case_when(P8_1	%in% c("Sí")	~	"Unicentro",
-                                             TRUE ~ NA))
+                                                   TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P8_2 = dplyr::case_when(P8_2	%in% c("Sí")	~	"Chipichape",
                                                    TRUE ~ NA))
@@ -50,31 +50,31 @@ db <- db %>% dplyr::mutate(P8_9 = dplyr::case_when(P8_9	%in% c("Sí")	~	"Mall Pl
                                                    TRUE ~ NA))
 # 10 -------------------------------------------------------------------------
 db <- db %>% dplyr::mutate(P10_1 = dplyr::case_when(P10_1	%in% c("Sí")	~	"Unicentro",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_2 = dplyr::case_when(P10_2	%in% c("Sí")	~	"Chipichape",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_3 = dplyr::case_when(P10_3	%in% c("Sí")	~	"Cosmocentro",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_4 = dplyr::case_when(P10_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_5 = dplyr::case_when(P10_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_6 = dplyr::case_when(P10_6	%in% c("Sí")	~	"Pacific Mall",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_7 = dplyr::case_when(P10_7	%in% c("Sí")	~	"Centenario",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_8 = dplyr::case_when(P10_8	%in% c("Sí")	~	"La estación",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P10_9 = dplyr::case_when(P10_9	%in% c("Sí")	~	"Mall Plaza",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 # 11 -------------------------------------------------------------------------
 db <- db %>% dplyr::mutate(P11_1 = dplyr::case_when(P11_1	%in% c("Sí")	~	"Unicentro",
                                                     TRUE ~ NA))
@@ -215,16 +215,16 @@ db <- db %>% dplyr::mutate(P16_9 = dplyr::case_when(P16_9	%in% c("Sí")	~	"Opcio
                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P16_10 = dplyr::case_when(P16_10	%in% c("Sí")	~	"Facilidad y amplitud del Estacionamiento",
-                                                    TRUE ~ NA))
+                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P16_11 = dplyr::case_when(P16_11 %in% c("Sí")	~	"Que sea de fácil acceso",
-                                                    TRUE ~ NA))
+                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P16_12 = dplyr::case_when(P16_12	%in% c("Sí")	~	"Que no cobren parqueadero",
-                                                    TRUE ~ NA))
+                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P16_13 = dplyr::case_when(P16_13	%in% c("Sí")	~	"Opciones de tienda para toda la familia",
-                                                    TRUE ~ NA))
+                                                     TRUE ~ NA))
 
 # 22 -------------------------------------------------------------------------
 db <- db %>% dplyr::mutate(P22_1 = dplyr::case_when(P22_1	%in% c("Sí")	~	"Compras de hombre y/o mujer",
@@ -271,7 +271,7 @@ db <- db %>% dplyr::mutate(P32_1 = dplyr::case_when(P32_1	%in% c("Sí")	~	"Limpi
                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P32_2 = dplyr::case_when(P32_2	%in% c("Sí")	~	"Seguridad",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P32_3 = dplyr::case_when(P32_3	%in% c("Sí")	~	"Variedad de tiendas",
                                                     TRUE ~ NA))
@@ -295,7 +295,7 @@ db <- db %>% dplyr::mutate(P35_1 = dplyr::case_when(P35_1	%in% c("Sí")	~	"Tiend
                                                     TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P35_2 = dplyr::case_when(P35_2	%in% c("Sí")	~	"Supermecados",
-                                                   TRUE ~ NA))
+                                                    TRUE ~ NA))
 
 db <- db %>% dplyr::mutate(P35_3 = dplyr::case_when(P35_3	%in% c("Sí")	~	"Restaurantes y cafeterias",
                                                     TRUE ~ NA))
@@ -536,7 +536,9 @@ db <- db %>% dplyr::mutate(P61_7 = dplyr::case_when(P61_7	%in% c("Sí")	~	"Prens
 db <- db %>% dplyr::mutate(P61_8 = dplyr::case_when(P61_8	%in% c("Sí")	~	"Publicidad exterior",
                                                     TRUE ~ NA))
 # Analisis descriptivo ----------------------------------------------------
-# Pregunta 6 -------------------------------------------------------------
+db <- db %>% dplyr::filter(., SEL != 1)
+
+# Pregunta  -------------------------------------------------------------
 Pr0 <- db %>% dplyr::select(SEL)
 Pr0 %>% glimpse
 # Analisis descriptivo
@@ -550,15 +552,15 @@ fqTable <- fqTable %>%
 #
 df2 <- fqTable %>% 
   mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
+         pos = round(Porcentaje/2,2) + lead(csum, 1),
+         pos = if_else(is.na(pos), round(Porcentaje/2,2), pos))
 
 gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
   geom_col(width = 1, color = 1) +
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -577,11 +579,10 @@ names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr2)) %>% 
   tidyr::drop_na()
-
 #
 gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
   geom_col(color = "black") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%")), color = c("white", "white"),
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
              position = position_stack(vjust = 0.5),
              show.legend = F) +
   guides(fill = guide_legend(title = " ")) +
@@ -601,14 +602,14 @@ fqTable <- Pr3 %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr3)) %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr3))*100) %>% 
   tidyr::drop_na()
 
 #
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2), color = "white") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.1)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.1)) +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -632,11 +633,26 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr6)) %>% 
   tidyr::drop_na()
 
+df2 <- fqTable %>% 
+  mutate(csum = rev(cumsum(rev(Porcentaje))), 
+         pos = round(Porcentaje/2,2) + lead(csum, 1),
+         pos = if_else(is.na(pos), round(Porcentaje/2,2), pos))
+
+gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
+  geom_col(width = 1, color = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer(palette = "Set1") +
+  ggrepel::geom_label_repel(data = df2,
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
+                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
+  guides(fill = guide_legend(title =" ")) +
+  theme_void()
+
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Si"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -647,7 +663,7 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_6.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_6A.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 8 --------------------------------------------------------------
 Pr8 <- db %>% dplyr::select(P8_1:P8_9)
@@ -663,7 +679,7 @@ fqTable <- fqTable %>%
 #
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -691,7 +707,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>% dplyr::filter(., Categoria != "{P8_other.NAOK}") %>% 
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = "left")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -720,7 +736,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -749,7 +765,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -778,7 +794,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -807,7 +823,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -836,7 +852,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -865,8 +881,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -911,7 +927,8 @@ fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Muy importante",
 #
 gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -923,7 +940,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -949,7 +966,7 @@ fqTable <- fqTable %>%
 #
 gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
   geom_col(color = "black") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%")), color = c("white", "white"),
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
              position = position_stack(vjust = 0.5),
              show.legend = F) +
   guides(fill = guide_legend(title = " ")) +
@@ -958,12 +975,6 @@ gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
   theme_void()
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_21.png"), gg, width=9, height=7, units = "in", dpi=366)
-
-
-
-
-
-
 
 # Pregunta 22 --------------------------------------------------------------
 Pr22 <- db %>% dplyr::select(P22_1:P22_13)
@@ -980,8 +991,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1008,8 +1019,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1036,8 +1047,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Una vez a la semana","Más de una vez a la semana","Cada dos meses"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1065,8 +1076,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   bar_chart(Categoria, Porcentaje, highlight = c("Una vez al año","Una vez al mes","Cada dos meses"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1091,16 +1102,16 @@ fqTable <- fqTable %>%
   tidyr::drop_na()
 #
 df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
+  mutate(csum = rev(cumsum(rev((Porcentaje)))), 
+         pos = round(Porcentaje/2,2) + lead(csum, 1),
+         pos = if_else(is.na(pos), round(Porcentaje/2,2), pos))
 
 gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
   geom_col(width = 1, color = 1) +
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1122,8 +1133,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1154,19 +1165,21 @@ fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Muy satisfecho",
 #
 gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = -0.1)) +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
   scale_fill_brewer(palette="RdYlGn", direction = -1)+
   scale_y_continuous(limits = c(0, 100)) +
   # facet_wrap(~ Variable, ) +
-  theme_ggcharts() +
+  # theme_ggcharts() +
+  theme_void() +
   theme(strip.text = element_text(size = 12, face = "bold"),
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -1174,7 +1187,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje
         strip.background = element_blank(),
         strip.text.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_28.png"), gg, width=13, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_28A.png"), gg, width=13, height=7, units = "in", dpi=366)
 
 # Pregunta 29 --------------------------------------------------------------
 Pr29 <- db %>% dplyr::select(P29)
@@ -1198,23 +1211,25 @@ lvl <- c("1 - Definitivamente no lo recomendaría",
 # 
 gg <- fqTable %>% ggplot(aes(x = factor(Categoria, level=lvl), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = -0.1)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
   scale_fill_brewer(palette="RdYlGn")+
-  scale_y_continuous(limits = c(0, 100)) +
+  scale_y_continuous(limits = c(0, 50)) +
   # facet_wrap(~ Variable, ) +
-  theme_ggcharts() +
+  # theme_ggcharts() +
+  theme_void() +
   theme(strip.text = element_text(size = 12, face = "bold"),
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         strip.background = element_blank(),
         strip.text.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_29.png"), gg, width=13, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_29A.jpeg"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 30 --------------------------------------------------------------
 Pr30 <- db %>% dplyr::select(P30)
@@ -1230,7 +1245,7 @@ fqTable <- fqTable %>%
 #
 gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
   geom_col(color = "black") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%")), color = c("white", "white"),
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
              position = position_stack(vjust = 0.5),
              show.legend = F) +
   guides(fill = guide_legend(title = " ")) +
@@ -1254,7 +1269,7 @@ fqTable <- fqTable %>%
 #
 gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
   geom_col(color = "black") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%")), color = c("white", "white"),
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
              position = position_stack(vjust = 0.5),
              show.legend = F) +
   guides(fill = guide_legend(title = " ")) +
@@ -1279,8 +1294,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1309,7 +1324,7 @@ fqTable <- fqTable %>%
 #
 gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -1353,19 +1368,20 @@ lvl <- c("Mucho mejor",
 # 
 gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = -0.1)) +
+  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
   scale_fill_brewer(palette="RdYlGn", direction = -1)+
-  scale_y_continuous(limits = c(0, 100)) +
+  scale_y_continuous(limits = c(0, 50)) +
   # facet_wrap(~ Variable, ) +
   theme_ggcharts() +
   theme(strip.text = element_text(size = 12, face = "bold"),
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -1373,8 +1389,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         strip.background = element_blank(),
         strip.text.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_34.png"), gg, width=13, height=7, units = "in", dpi=366)
-
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_34.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 35 --------------------------------------------------------------
 Pr35 <- db %>% dplyr::select(P35_1:P35_11)
@@ -1391,8 +1406,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1419,8 +1434,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1455,7 +1470,8 @@ lvl <- c("Excelente",
 # 
 gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -1467,7 +1483,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -1492,8 +1508,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1536,7 +1552,8 @@ lvl <- c("Excelente",
 # 
 gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -1548,7 +1565,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom")
+        legend.position="none")
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_39-45.png"), gg, width=15, height=7, units = "in", dpi=366)
 
@@ -1575,7 +1592,8 @@ lvl <- c("Muy agradable",
 #
 gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -1587,7 +1605,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -1619,7 +1637,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1642,8 +1660,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1654,6 +1672,7 @@ gg <- fqTable %>%
         axis.ticks.x = element_blank())
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_47.png"), gg, width=15, height=7, units = "in", dpi=366)
+
 # Pregunta 48 --------------------------------------------------------------
 Pr48 <- db %>% dplyr::select(P48)
 Pr48 %>% glimpse
@@ -1676,7 +1695,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1698,8 +1717,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1726,8 +1745,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1737,7 +1756,7 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_50.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_50.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Evaluacion de publicidad ------------------------------------------------
 # Pregunta 51 -------------------------------------------------------------
@@ -1762,17 +1781,13 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_51.png"), gg, width=9, height=7, units = "in", dpi=366)
 rm(df2)
-
-
-
-
 
 # Pregunta 52 -------------------------------------------------------------
 Pr52 <- db %>% dplyr::select(P52)
@@ -1796,7 +1811,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1819,7 +1834,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1831,10 +1846,6 @@ gg <- fqTable %>%
         axis.ticks.x = element_blank())
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_53.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-
-
-
 
 # Pregunta 54 -------------------------------------------------------------
 Pr54 <- db %>% dplyr::select(P54_1:P54_5)
@@ -1851,8 +1862,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1879,8 +1890,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1914,7 +1925,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1936,8 +1947,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1964,7 +1975,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1999,7 +2010,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -2028,7 +2039,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -2050,7 +2061,7 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -2064,7 +2075,51 @@ gg <- fqTable %>%
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_61.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # wordcloud ---------------------------------------------------------------
+library(wordcloud)
+library(RColorBrewer)
+#
+docs <- Corpus(VectorSource(db$P7))
+inspect(docs)
 
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# Remover una palabra en particular.
+# Se especifica las stopwords como un vector de caracteres.
+docs <- tm_map(docs, removeWords, c("hace", "wow", "mall", "fechas","padr",
+                                    "myyu", "ccial", "mes", "zumba","madr", 
+                                    "bueno", "ofrece", "nueva", "sitios"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+# Text stemming
+docs <- tm_map(docs, stemDocument)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_7.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=50, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
 
 # -------------------------------------------------------------------------
 
