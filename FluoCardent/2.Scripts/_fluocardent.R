@@ -8,8 +8,8 @@
 g <- gc(reset = T); rm(list = ls())
 options(warn = -1, scipen = 999)
 suppressMessages(library(pacman))
-suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, foreign, ggcharts, mdthemes,forcats,
-                                readxl, raster, geodata, terra, sf, sp, lubridate))
+suppressMessages(pacman::p_load(dplyr, tidyr, ggrepel, ggplot2, gganimate, foreign, ggcharts, mdthemes,forcats,
+                                tm, wordcloud, readxl, raster, geodata, terra, sf, sp, lubridate))
 
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
 prj <- "FluoCardent"
@@ -19,534 +19,41 @@ db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Estudio cremas dentales
                          to.data.frame = T)
 head(db)
 
-# analisis exploratorio ---------------------------------------------------
-# Re clasificacion de variables -------------------------------------------
-# 8 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P8_1 = dplyr::case_when(P8_1	%in% c("Sí")	~	"Unicentro",
-                                                   TRUE ~ NA))
+db <- db %>% dplyr::mutate(REGION = dplyr::case_when(REGION	%in% c("Barranquilla")	~	"Barranquilla",
+                                                     REGION	%in% c("Bogotá")	~	"Bogotá, D.C.",
+                                                     REGION	%in% c("Cali ")	~	"Cali",
+                                                     REGION	%in% c("Medellín")	~	"Medellín"))
 
-db <- db %>% dplyr::mutate(P8_2 = dplyr::case_when(P8_2	%in% c("Sí")	~	"Chipichape",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_3 = dplyr::case_when(P8_3	%in% c("Sí")	~	"Cosmocentro",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_4 = dplyr::case_when(P8_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_5 = dplyr::case_when(P8_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_6 = dplyr::case_when(P8_6	%in% c("Sí")	~	"Pacific Mall",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_7 = dplyr::case_when(P8_7	%in% c("Sí")	~	"Centenario",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_8 = dplyr::case_when(P8_8	%in% c("Sí")	~	"La estación",
-                                                   TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P8_9 = dplyr::case_when(P8_9	%in% c("Sí")	~	"Mall Plaza",
-                                                   TRUE ~ NA))
-# 10 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P10_1 = dplyr::case_when(P10_1	%in% c("Sí")	~	"Unicentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_2 = dplyr::case_when(P10_2	%in% c("Sí")	~	"Chipichape",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_3 = dplyr::case_when(P10_3	%in% c("Sí")	~	"Cosmocentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_4 = dplyr::case_when(P10_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_5 = dplyr::case_when(P10_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_6 = dplyr::case_when(P10_6	%in% c("Sí")	~	"Pacific Mall",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_7 = dplyr::case_when(P10_7	%in% c("Sí")	~	"Centenario",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_8 = dplyr::case_when(P10_8	%in% c("Sí")	~	"La estación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P10_9 = dplyr::case_when(P10_9	%in% c("Sí")	~	"Mall Plaza",
-                                                    TRUE ~ NA))
-# 11 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P11_1 = dplyr::case_when(P11_1	%in% c("Sí")	~	"Unicentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_2 = dplyr::case_when(P11_2	%in% c("Sí")	~	"Chipichape",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_3 = dplyr::case_when(P11_3	%in% c("Sí")	~	"Cosmocentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_4 = dplyr::case_when(P11_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_5 = dplyr::case_when(P11_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_6 = dplyr::case_when(P11_6	%in% c("Sí")	~	"Pacific Mall",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_7 = dplyr::case_when(P11_7	%in% c("Sí")	~	"Centenario",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_8 = dplyr::case_when(P11_8	%in% c("Sí")	~	"La estación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P11_9 = dplyr::case_when(P11_9	%in% c("Sí")	~	"Mall Plaza",
-                                                    TRUE ~ NA))
-# 12 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P12_1 = dplyr::case_when(P12_1	%in% c("Sí")	~	"Unicentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_2 = dplyr::case_when(P12_2	%in% c("Sí")	~	"Chipichape",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_3 = dplyr::case_when(P12_3	%in% c("Sí")	~	"Cosmocentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_4 = dplyr::case_when(P12_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_5 = dplyr::case_when(P12_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_6 = dplyr::case_when(P12_6	%in% c("Sí")	~	"Pacific Mall",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_7 = dplyr::case_when(P12_7	%in% c("Sí")	~	"Centenario",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_8 = dplyr::case_when(P12_8	%in% c("Sí")	~	"La estación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P12_9 = dplyr::case_when(P12_9	%in% c("Sí")	~	"Mall Plaza",
-                                                    TRUE ~ NA))
-# 14 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P14_1 = dplyr::case_when(P14_1	%in% c("Sí")	~	"Unicentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_2 = dplyr::case_when(P14_2	%in% c("Sí")	~	"Chipichape",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_3 = dplyr::case_when(P14_3	%in% c("Sí")	~	"Cosmocentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_4 = dplyr::case_when(P14_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_5 = dplyr::case_when(P14_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_6 = dplyr::case_when(P14_6	%in% c("Sí")	~	"Pacific Mall",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_7 = dplyr::case_when(P14_7	%in% c("Sí")	~	"Centenario",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_8 = dplyr::case_when(P14_8	%in% c("Sí")	~	"La estación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P14_9 = dplyr::case_when(P14_9	%in% c("Sí")	~	"Mall Plaza",
-                                                    TRUE ~ NA))
-
-# 15 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P15_1 = dplyr::case_when(P15_1	%in% c("Sí")	~	"Unicentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_2 = dplyr::case_when(P15_2	%in% c("Sí")	~	"Chipichape",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_3 = dplyr::case_when(P15_3	%in% c("Sí")	~	"Cosmocentro",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_4 = dplyr::case_when(P15_4	%in% c("Sí")	~	"Jardín Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_5 = dplyr::case_when(P15_5	%in% c("Sí")	~	"Palmetto Plaza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_6 = dplyr::case_when(P15_6	%in% c("Sí")	~	"Pacific Mall",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_7 = dplyr::case_when(P15_7	%in% c("Sí")	~	"Centenario",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_8 = dplyr::case_when(P15_8	%in% c("Sí")	~	"La estación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P15_9 = dplyr::case_when(P15_9	%in% c("Sí")	~	"Mall Plaza",
-                                                    TRUE ~ NA))
-
-
-# 16 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P16_1 = dplyr::case_when(P16_1	%in% c("Sí")	~	"Ubicación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_2 = dplyr::case_when(P16_2	%in% c("Sí")	~	"Variedad de tiendas para mi",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_3 = dplyr::case_when(P16_3	%in% c("Sí")	~	"Que realicen ferias y/o eventos de mi interés",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_4 = dplyr::case_when(P16_4	%in% c("Sí")	~	"Precios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_5 = dplyr::case_when(P16_5	%in% c("Sí")	~	"Seguridad",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_6 = dplyr::case_when(P16_6	%in% c("Sí")	~	"Ambiente en general",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_7 = dplyr::case_when(P16_7	%in% c("Sí")	~	"Opciones de servicios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_8 = dplyr::case_when(P16_8	%in% c("Sí")	~	"Opciones de entretenimiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_9 = dplyr::case_when(P16_9	%in% c("Sí")	~	"Opciones de comida",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_10 = dplyr::case_when(P16_10	%in% c("Sí")	~	"Facilidad y amplitud del Estacionamiento",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_11 = dplyr::case_when(P16_11 %in% c("Sí")	~	"Que sea de fácil acceso",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_12 = dplyr::case_when(P16_12	%in% c("Sí")	~	"Que no cobren parqueadero",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P16_13 = dplyr::case_when(P16_13	%in% c("Sí")	~	"Opciones de tienda para toda la familia",
-                                                     TRUE ~ NA))
-
-# 22 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P22_1 = dplyr::case_when(P22_1	%in% c("Sí")	~	"Compras de hombre y/o mujer",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_2 = dplyr::case_when(P22_2	%in% c("Sí")	~	"Compra de accesorios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_3 = dplyr::case_when(P22_3	%in% c("Sí")	~	"Compras de mercado",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_4 = dplyr::case_when(P22_4	%in% c("Sí")	~	"Ir a un bar",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_5 = dplyr::case_when(P22_5	%in% c("Sí")	~	"Compra de zapatos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_6 = dplyr::case_when(P22_6	%in% c("Sí")	~	"Ir a comer a restaurantes formales",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_7 = dplyr::case_when(P22_7	%in% c("Sí")	~	"Compra de implementos y ropa deportiva",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_8 = dplyr::case_when(P22_8	%in% c("Sí")	~	"Compra de elementos para bebes y niños",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_9 = dplyr::case_when(P22_9	%in% c("Sí")	~	"Ir a comida rapida",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_10 = dplyr::case_when(P22_10	%in% c("Sí")	~	"Actividades de entretenimiento",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_11 = dplyr::case_when(P22_11 %in% c("Sí")	~	"Uso de servicios",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_12 = dplyr::case_when(P22_12	%in% c("Sí")	~	"Compra de elementos de salud y bienestar",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P22_13 = dplyr::case_when(P22_13	%in% c("Sí")	~	"Compra de elementos de cuero",
-                                                     TRUE ~ NA))
-
-# 32 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P32_1 = dplyr::case_when(P32_1	%in% c("Sí")	~	"Limpieza y mantenimiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_2 = dplyr::case_when(P32_2	%in% c("Sí")	~	"Seguridad",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_3 = dplyr::case_when(P32_3	%in% c("Sí")	~	"Variedad de tiendas",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_4 = dplyr::case_when(P32_4	%in% c("Sí")	~	"Precios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_5 = dplyr::case_when(P32_5	%in% c("Sí")	~	"Servicio al cliente",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_6 = dplyr::case_when(P32_6	%in% c("Sí")	~	"Opciones de comida",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_7 = dplyr::case_when(P32_7	%in% c("Sí")	~	"Estacionamiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P32_8 = dplyr::case_when(P32_8	%in% c("Sí")	~	"Ambiente general",
-                                                    TRUE ~ NA))
-# 35 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P35_1 = dplyr::case_when(P35_1	%in% c("Sí")	~	"Tienda de ropa y accesorios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_2 = dplyr::case_when(P35_2	%in% c("Sí")	~	"Supermecados",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_3 = dplyr::case_when(P35_3	%in% c("Sí")	~	"Restaurantes y cafeterias",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_4 = dplyr::case_when(P35_4	%in% c("Sí")	~	"Cines",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_5 = dplyr::case_when(P35_5	%in% c("Sí")	~	"Bancos y cajeros automaticos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_6 = dplyr::case_when(P35_6	%in% c("Sí")	~	"Gimnasio",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_7 = dplyr::case_when(P35_7	%in% c("Sí")	~	"Áreas de jugos para niños",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_8 = dplyr::case_when(P35_8	%in% c("Sí")	~	"Servicios de mensajeria",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_9 = dplyr::case_when(P35_9	%in% c("Sí")	~	"Serviteca",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_10 = dplyr::case_when(P35_10	%in% c("Sí")	~	"Karts",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P35_11 = dplyr::case_when(P35_11 %in% c("Sí")	~	"Bolos",
-                                                     TRUE ~ NA))
-
-
-# 36 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P36_1 = dplyr::case_when(P36_1	%in% c("Sí")	~	"Tienda de ropa y accesorios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_2 = dplyr::case_when(P36_2	%in% c("Sí")	~	"Supermecados",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_3 = dplyr::case_when(P36_3	%in% c("Sí")	~	"Restaurantes y cafeterias",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_4 = dplyr::case_when(P36_4	%in% c("Sí")	~	"Cines",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_5 = dplyr::case_when(P36_5	%in% c("Sí")	~	"Bancos y cajeros automaticos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_6 = dplyr::case_when(P36_6	%in% c("Sí")	~	"Gimnasio",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_7 = dplyr::case_when(P36_7	%in% c("Sí")	~	"Áreas de jugos para niños",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_8 = dplyr::case_when(P36_8	%in% c("Sí")	~	"Servicios de mensajeria",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_9 = dplyr::case_when(P36_9	%in% c("Sí")	~	"Serviteca",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_10 = dplyr::case_when(P36_10	%in% c("Sí")	~	"Karts",
-                                                     TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P36_11 = dplyr::case_when(P36_11 %in% c("Sí")	~	"Bolos",
-                                                     TRUE ~ NA))
-
-
-# 38 ----------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P38_1 = dplyr::case_when(P38_1	%in% c("Sí")	~	"Cines",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_2 = dplyr::case_when(P38_2	%in% c("Sí")	~	"Area de juegos para niños",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_3 = dplyr::case_when(P38_3	%in% c("Sí")	~	"Eventos y conciertos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_4 = dplyr::case_when(P38_4	%in% c("Sí")	~	"Salas de videojuegos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_5 = dplyr::case_when(P38_5	%in% c("Sí")	~	"Áreas de descanso y recreación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_6 = dplyr::case_when(P38_6	%in% c("Sí")	~	"Karts",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P38_7 = dplyr::case_when(P38_7	%in% c("Sí")	~	"Arenero",
-                                                    TRUE ~ NA))
-
-# 47 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P47_1 = dplyr::case_when(P47_1	%in% c("Sí")	~	"Variedad de tiendas",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_2 = dplyr::case_when(P47_2	%in% c("Sí")	~	"Oferta de entretenimiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_3 = dplyr::case_when(P47_3	%in% c("Sí")	~	"Calidad de la atencion al cliente",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_4 = dplyr::case_when(P47_4	%in% c("Sí")	~	"Ambiente",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_5 = dplyr::case_when(P47_5	%in% c("Sí")	~	"Oferta de servicios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_6 = dplyr::case_when(P47_6	%in% c("Sí")	~	"Decoración",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_7 = dplyr::case_when(P47_7	%in% c("Sí")	~	"Ubicación",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P47_8 = dplyr::case_when(P47_8	%in% c("Sí")	~	"Accesibilidad",
-                                                    TRUE ~ NA))
-# 49 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P49_1 = dplyr::case_when(P49_1	%in% c("Sí")	~	"Variedad de tiendas",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_2 = dplyr::case_when(P49_2	%in% c("Sí")	~	"Seguridad",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_3 = dplyr::case_when(P49_3	%in% c("Sí")	~	"Limpieza",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_4 = dplyr::case_when(P49_4	%in% c("Sí")	~	"Oferta de entretenimiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_5 = dplyr::case_when(P49_5	%in% c("Sí")	~	"Atencion al cliente",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_6 = dplyr::case_when(P49_6	%in% c("Sí")	~	"Oferta de servicios",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_7 = dplyr::case_when(P49_7	%in% c("Sí")	~	"Cobro de parqueadero",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_8 = dplyr::case_when(P49_8	%in% c("Sí")	~	"Zonas verdes",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P49_9 = dplyr::case_when(P49_9	%in% c("Sí")	~	"Áreas de descanso",
-                                                    TRUE ~ NA))
-
-
-# 53 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P53_1 = dplyr::case_when(P53_1	%in% c("Sí")	~	"Facebook",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_2 = dplyr::case_when(P53_2	%in% c("Sí")	~	"Instagram",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_3 = dplyr::case_when(P53_3	%in% c("Sí")	~	"WhatsApp",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_4 = dplyr::case_when(P53_4	%in% c("Sí")	~	"Twitter",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_5 = dplyr::case_when(P53_5	%in% c("Sí")	~	"LinkedIn",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_6 = dplyr::case_when(P53_6	%in% c("Sí")	~	"TikTok",
-                                                    TRUE ~ NA))
-
-# 54 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P54_1 = dplyr::case_when(P54_1	%in% c("Sí")	~	"Noticias",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P54_2 = dplyr::case_when(P54_2	%in% c("Sí")	~	"Entretenimiento",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P54_3 = dplyr::case_when(P54_3	%in% c("Sí")	~	"Informacion general",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P54_4 = dplyr::case_when(P54_4	%in% c("Sí")	~	"Compras",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P53_5 = dplyr::case_when(P53_5	%in% c("Sí")	~	"Educación",
-                                                    TRUE ~ NA))
-
-# 57 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P57_1 = dplyr::case_when(P57_1	%in% c("Sí")	~	"Televisión",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P57_2 = dplyr::case_when(P57_2	%in% c("Sí")	~	"Radio",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P57_3 = dplyr::case_when(P57_3	%in% c("Sí")	~	"Redes sociales",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P57_4 = dplyr::case_when(P57_4	%in% c("Sí")	~	"En linea",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P57_5 = dplyr::case_when(P57_5	%in% c("Sí")	~	"Impresos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P57_6 = dplyr::case_when(P57_6	%in% c("Sí")	~	"Publicidad exterior ",
-                                                    TRUE ~ NA))
-
-# 58 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P58_1 = dplyr::case_when(P58_1	%in% c("Sí")	~	"Ofertas y descuentos especiales",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_2 = dplyr::case_when(P58_2	%in% c("Sí")	~	"Nuevas tiendas o aperturas",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_3 = dplyr::case_when(P58_3	%in% c("Sí")	~	"Información de eventos",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_4 = dplyr::case_when(P58_4	%in% c("Sí")	~	"Invitación a alguna actividad promocional por fecha especial",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_5 = dplyr::case_when(P58_5	%in% c("Sí")	~	"Comodidades y servicios del centro comercial",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_6 = dplyr::case_when(P58_6	%in% c("Sí")	~	"Publicidad relacionada a un ambiente familiar y acogedor",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P58_7 = dplyr::case_when(P58_7	%in% c("Sí")	~	"Invitación a visitar el centro comercial",
-                                                    TRUE ~ NA))
-
-# 61 -------------------------------------------------------------------------
-db <- db %>% dplyr::mutate(P61_1 = dplyr::case_when(P61_1	%in% c("Sí")	~	"Instagram",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_2 = dplyr::case_when(P61_2	%in% c("Sí")	~	"Facebook",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_3 = dplyr::case_when(P61_3	%in% c("Sí")	~	"TikTok",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_4 = dplyr::case_when(P61_4	%in% c("Sí")	~	"Whatsapp",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_5 = dplyr::case_when(P61_5	%in% c("Sí")	~	"Televisión",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_6 = dplyr::case_when(P61_6	%in% c("Sí")	~	"Radio",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_7 = dplyr::case_when(P61_7	%in% c("Sí")	~	"Prensa",
-                                                    TRUE ~ NA))
-
-db <- db %>% dplyr::mutate(P61_8 = dplyr::case_when(P61_8	%in% c("Sí")	~	"Publicidad exterior",
-                                                    TRUE ~ NA))
 # Analisis descriptivo ----------------------------------------------------
-# Pregunta 6 -------------------------------------------------------------
-Pr0 <- db %>% dplyr::select(SEL)
-Pr0 %>% glimpse
+# Pregunta 2 -------------------------------------------------------------
+Pr2 <- db %>% dplyr::select(REGION)
+Pr2 %>% glimpse
 # Analisis descriptivo
-fqTable <- Pr0 %>%
+fqTable <- Pr2 %>%
   gather(measure, value) %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr0)) %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr2))*100) %>% 
   tidyr::drop_na()
+
+#
+shp <- terra::vect(paste0(root,"Shp_colombia/col_admbnda_adm2.shp"))
+col <- sf::st_as_sf(shp)
+data1 <- dplyr::inner_join(col, fqTable, by = c('ADM2_ES' = 'Categoria'))
+
+#
+gg <- ggplot2::ggplot() +
+  ggplot2::geom_sf(data = sf::st_as_sf(data1), aes(fill = Porcentaje), col = 'grey50') +
+  # ggplot2::scale_fill_gradientn(colors = brewer.pal(n = 3, name = 'YlOrRd')) +
+  ggplot2::geom_sf(data = sf::st_as_sf(col), fill = NA, col = 'grey20') +
+  ggplot2::coord_sf() +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = 'bottom',
+                 axis.text.y = element_text(angle = 90, hjust = 0.5))
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/map.png"), 
+                gg,width=10, height=7, units = "in", dpi=360)
 #
 df2 <- fqTable %>% 
   mutate(csum = rev(cumsum(rev(Porcentaje))), 
@@ -558,41 +65,15 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_NSE.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_2.png"), gg, width=9, height=7, units = "in", dpi=366)
 rm(df2)
-# Pregunta 2 --------------------------------------------------------------
-Pr2 <- db %>% dplyr::select(Gender)
-Pr2 %>% glimpse
-
-# Analisis descriptivo
-fqTable <- Pr2 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr2)) %>% 
-  tidyr::drop_na()
-
-#
-gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
-  geom_col(color = "black") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%")), color = c("white", "white"),
-             position = position_stack(vjust = 0.5),
-             show.legend = F) +
-  guides(fill = guide_legend(title = " ")) +
-  scale_fill_manual(values = c("steelblue", "#f41c5c")) +
-  coord_polar(theta = "y") + 
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_gender.png"), gg, width=9, height=7, units = "in", dpi=366)
-
 # Pregunta 3 --------------------------------------------------------------
-Pr3 <- db %>% dplyr::select(Range)
+Pr3 <- db %>% dplyr::select(SEL)
 Pr3 %>% glimpse
 
 # Analisis descriptivo
@@ -601,27 +82,88 @@ fqTable <- Pr3 %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr3)) %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr3)*100)) %>% 
   tidyr::drop_na()
 
 #
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje) +
-  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2), color = "white") +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.1)) +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
+#
+df2 <- fqTable %>% 
+  mutate(csum = rev(cumsum(rev(Porcentaje))), 
+         pos = Porcentaje/2 + lead(csum, 1),
+         pos = if_else(is.na(pos), Porcentaje/2, pos))
+
+gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
+  geom_col(width = 1, color = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer(palette = "Set1") +
+  geom_label_repel(data = df2,
+                   aes(y = pos, label = paste0(round(Porcentaje,2), "%")),
+                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
+  guides(fill = guide_legend(title =" ")) +
+  theme_void()
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_3.png"), gg, width=9, height=7, units = "in", dpi=366)
+rm(df2)
+# Pregunta 4 --------------------------------------------------------------
+Pr4 <- db %>% dplyr::select(GENDER)
+Pr4 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr4 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr4)) %>% 
+  tidyr::drop_na()
+
+gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
+  geom_col(color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
+             position = position_stack(vjust = 0.5),
+             show.legend = F) +
+  guides(fill = guide_legend(title = " ")) +
+  scale_fill_manual(values = c("steelblue", "#f41c5c")) +
+  coord_polar(theta = "y") + 
+  theme_void()
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_4.png"), gg, width=9, height=7, units = "in", dpi=366)
+rm(df2)
+
+# Pregunta 5 --------------------------------------------------------------
+Pr3 <- db %>% dplyr::select(AGE_RANGE,GENDER)
+Pr3 %>% glimpse
+
+# Analisis descriptivo
+fqTable <- Pr3 %>% 
+  group_by(., GENDER) %>% 
+  count(AGE_RANGE) %>% 
+  dplyr::mutate(Porcentaje = (prop.table(n)*100))
+
+fqTable <- fqTable %>%
+  mutate(Porcentaje_total = ifelse(GENDER == "Masculino",
+                                   -Porcentaje, Porcentaje),
+         Porcentaje_total = ifelse(GENDER == "Masculino", -Porcentaje, Porcentaje))
+
+gg <- fqTable %>% 
+  ggplot(aes(x = AGE_RANGE,
+             y = Porcentaje_total, fill = GENDER)) +
+  geom_col(position = "stack", alpha = 0.6) + 
+  coord_flip() +
+  scale_fill_manual(values = c("midnightblue", "darkred")) +
+  theme_ggcharts() +
+  theme(legend.position = "bottom",
+        plot.caption = element_text(hjust = 0)) +
+  scale_y_continuous(labels = abs) +
+  labs(y = " ",
+       x = " ",
+       title = " ", 
+       subtitle = " ") +
+  guides(fill=guide_legend(title=" "))
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_edad.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 6 --------------------------------------------------------------
-Pr6 <- db %>% dplyr::select(P6)
+Pr6 <- db %>% dplyr::select(F6_1:F6_5)
 Pr6 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr6 %>%
@@ -629,14 +171,12 @@ fqTable <- Pr6 %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr6)) %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr6))*100) %>% 
   tidyr::drop_na()
 
 gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, highlight = c("Si"), bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2), color = "black") +
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  geom_text(aes(label = paste0(Porcentaje,"%"), hjust = 1.2), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -649,8 +189,48 @@ gg <- fqTable %>%
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_6.png"), gg, width=9, height=7, units = "in", dpi=366)
 
+# Pregunta 7 --------------------------------------------------------------
+Pr7 <- db %>% dplyr::select(Q1_1,Q1_2,Q1_3)
+Pr7 %>% glimpse
+
+docs <- Corpus(VectorSource(Pr7))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_7.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=50, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
+
 # Pregunta 8 --------------------------------------------------------------
-Pr8 <- db %>% dplyr::select(P8_1:P8_9)
+Pr8 <- db %>% dplyr::select(Q2)
 Pr8 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr8 %>%
@@ -660,53 +240,63 @@ names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr8)) %>% 
   tidyr::drop_na()
+
+fqTable$frame=rep('a',2)
 #
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  # scale_y_continuous(expand = expansion()) +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
+gg <- ggplot(fqTable, aes(x = "", y = Porcentaje, fill = Categoria)) +
+  geom_col(color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%")), color = c("white", "white"),
+             position = position_stack(vjust = 0.5),
+             show.legend = F) +
+  guides(fill = guide_legend(title = " ")) +
+  scale_fill_manual(values = c("steelblue", "#f41c5c")) +
+  coord_polar(theta = "y") + 
+  theme_void()
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_8.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 9 --------------------------------------------------------------
-Pr9 <- db %>% dplyr::select(P9)
+Pr9 <- db %>% dplyr::select(Q3_1,Q3_2,Q3_3)
 Pr9 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr9 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr9)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>% dplyr::filter(., Categoria != "{P8_other.NAOK}") %>% 
-  bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = "left")) +
-  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  # scale_y_continuous(expand = expansion()) +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_9.png"), gg, width=9, height=7, units = "in", dpi=366)
+docs <- Corpus(VectorSource(Pr9))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_9.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=50, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
 
 # Pregunta 10 --------------------------------------------------------------
-Pr10 <- db %>% dplyr::select(P10_1:P10_9)
+Pr10 <- db %>% dplyr::select(Q4_1:Q4_8)
 Pr10 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr10 %>%
@@ -718,9 +308,9 @@ fqTable <- fqTable %>%
   tidyr::drop_na()
 #
 gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  bar_chart(Categoria, Porcentaje, highlight = c("Fluocardent  "), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
@@ -734,21 +324,21 @@ gg <- fqTable %>%
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_10.png"), gg, width=9, height=7, units = "in", dpi=366)
 
-# Pregunta 16 --------------------------------------------------------------
-Pr16 <- db %>% dplyr::select(Q11_1:Q11_8)
-Pr16 %>% glimpse
+# Pregunta 11 --------------------------------------------------------------
+Pr11 <- db %>% dplyr::select(Q5_1:Q5_8)
+Pr11 %>% glimpse
 # Analisis descriptivo
-fqTable <- Pr16 %>%
+fqTable <- Pr11 %>%
   gather(measure, value) %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr16)) %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr11)) %>% 
   tidyr::drop_na()
 #
 gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, highlight = c("Salud general y bienestar"), bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
+  # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  bar_chart(Categoria, Porcentaje, highlight = c("Fluocardent  "), bar_color = c("steelblue")) +
   geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
@@ -761,7 +351,178 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_16.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_11.png"), gg, width=9, height=7, units = "in", dpi=366)
+
+# Pregunta 12 --------------------------------------------------------------
+Pr12 <- db %>% dplyr::select(Q6)
+Pr12 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr12 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr12)) %>% 
+  tidyr::drop_na()
+#
+gg <- fqTable %>%
+  # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  bar_chart(Categoria, Porcentaje, highlight = c("Fluocardent  "), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  # scale_y_continuous(expand = expansion()) +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_12.png"), gg, width=9, height=7, units = "in", dpi=366)
+
+# Pregunta 12-A --------------------------------------------------------------
+Pr <- db %>% dplyr::select(Q8_1:Q8_12)
+Pr %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr)) %>% 
+  tidyr::drop_na()
+#
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Fluocardent  "), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  # scale_y_continuous(expand = expansion()) +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_12A.png"), gg, width=9, height=7, units = "in", dpi=366)
+
+# -------------------------------------------------------------------------
+Pr <- db %>% dplyr::select(Q6, Q8_1:Q8_12)
+
+fqTable <- Pr %>% dplyr::group_by(., Q6) %>% 
+  tidyr::pivot_longer(cols = starts_with("Q8_"), 
+                      names_to = "Question", 
+                      values_to = "Response") %>% 
+  dplyr::count(Question, Response) %>% tidyr::drop_na() %>% 
+  dplyr::mutate(Porcentaje = prop.table(n))
+
+gg <- fqTable %>% dplyr::filter(., Q6 == c("Fluocardent  ")) %>% 
+  ggplot(aes(x = reorder(Response, +Porcentaje), y = Porcentaje*100, fill=Q6)) +
+  geom_bar(stat="identity",show.legend = F) + 
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  ggtitle("") +
+  xlab("") + ylab("Porcentaje (%)") +
+  coord_flip() +
+  facet_wrap(~Q6, ncol = 2) +
+  scale_fill_brewer(palette="Set3", direction = 1)+
+  # scale_y_continuous(limits = c(0, 60)) +
+  theme_ggcharts() +
+  theme(strip.text = element_text(size = 12, face = "bold"),
+        axis.title.x = element_text(size = 13, face = 'bold'),
+        axis.title.y = element_text(size = 13, face = 'bold'),
+        axis.text = element_text(size = 12),
+        legend.position="none")
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_12_1.png"), gg, width=20, height=12, units = "in", dpi=366)
+
+# Pregunta 13 --------------------------------------------------------------
+Pr13 <- db %>% dplyr::select(Q9)
+Pr13 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr13 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr13)) 
+fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Muy a menudo",
+                                                          "A menudo",
+                                                          "De vez en cuando",
+                                                          "Raramente",
+                                                          "Nunca"), ordered = T)
+#
+lvl <- c("Muy a menudo",
+         "A menudo",
+         "De vez en cuando",
+         "Raramente",
+         "Nunca")
+# 
+gg <- fqTable %>% ggplot(aes(x = factor(Categoria, level=lvl), y = Porcentaje*100, fill=Categoria)) +
+  geom_bar(stat="identity",show.legend = F) + 
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = -0.1)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  ggtitle("") +
+  xlab("") + ylab("Porcentaje (%)") +
+  coord_flip() +
+  scale_fill_brewer(palette="RdYlGn",direction = -1)+
+  scale_y_continuous(limits = c(0, 50)) +
+  # facet_wrap(~ Variable, ) +
+  # theme_ggcharts() +
+  theme_void() +
+  theme(strip.text = element_text(size = 12, face = "bold"),
+        axis.title.x = element_text(size = 13, face = 'bold'),
+        axis.title.y = element_text(size = 13, face = 'bold'),
+        axis.text = element_text(size = 12),
+        legend.position="none",
+        strip.background = element_blank(),
+        strip.text.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_13.png"), gg, width=9, height=7, units = "in", dpi=366)
+
+# Pregunta 14 --------------------------------------------------------------
+Pr9 <- db %>% dplyr::select(Q10)
+Pr9 %>% glimpse
+
+docs <- Corpus(VectorSource(Pr9))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_14.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=50, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
 
 # Pregunta 12 --------------------------------------------------------------
 Pr12 <- db %>% dplyr::select(P12_1:P12_9)
@@ -864,23 +625,23 @@ gg <- fqTable %>%
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_15.png"), gg, width=15, height=7, units = "in", dpi=366)
 
-# Pregunta 19 ----------------------------------------------------------
-Pr19 <- db %>% dplyr::select(Q19)
-Pr19 %>% glimpse
+# Pregunta 16 --------------------------------------------------------------
+Pr16 <- db %>% dplyr::select(Q11_1:Q11_8)
+Pr16 %>% glimpse
 # Analisis descriptivo
-fqTable <- Pr19 %>%
+fqTable <- Pr16 %>%
   gather(measure, value) %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr)) %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr16)) %>% 
   tidyr::drop_na()
-
+#
 gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  bar_chart(Categoria, Porcentaje, highlight = c("Salud general y bienestar"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
   geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
-  # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -891,18 +652,186 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_19.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_16.png"), gg, width=9, height=7, units = "in", dpi=366)
 
-# Pregunta 20 -------------------------------------------------------------
-Pr20 <- db %>% dplyr::select(Q20_1:Q20_7)
-Pr20 %>% glimpse
+# Pregunta 17 --------------------------------------------------------------
+Pr9 <- db %>% dplyr::select(Q12)
+Pr9 %>% glimpse
+
+docs <- Corpus(VectorSource(Pr9))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_14.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=500, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
+
+# Pregunta 18 -------------------------------------------------------------
+Pr18 <- db %>% dplyr::select(Q13)
+Pr18 %>% glimpse
 # Analisis descriptivo
-fqTable <- Pr20 %>%
+fqTable <- Pr18 %>%
   gather(measure, value) %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr20)) %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr18)) 
+fqTable$Categoria <- factor(fqTable$Categoria, levels = c("1",
+                                                          "2",
+                                                          "3",
+                                                          "4",
+                                                          "5"), ordered = T)
+fqTable <- fqTable %>% dplyr::mutate(Categoria = dplyr::case_when(Categoria == 1 ~ "1",
+                                                                  Categoria == 2 ~ "2",
+                                                                  Categoria == 3 ~ "3",
+                                                                  Categoria == 4 ~ "4",
+                                                                  Categoria == 5 ~ "5"))
+#
+lvl <- c("1",
+         "4",
+         "3",
+         "2",
+         "5")
+# 
+gg <- fqTable %>% ggplot(aes(x = order(Categoria, +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
+  geom_bar(stat="identity",show.legend = F) + 
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = -0.1)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  ggtitle("") +
+  xlab("") + ylab("Porcentaje (%)") +
+  coord_flip() +
+  scale_fill_brewer(palette="RdYlGn")+
+  scale_y_continuous(limits = c(0, 50)) +
+  # facet_wrap(~ Variable, ) +
+  # theme_ggcharts() +
+  theme_void() +
+  theme(strip.text = element_text(size = 12, face = "bold"),
+        axis.title.x = element_text(size = 13, face = 'bold'),
+        axis.title.y = element_text(size = 13, face = 'bold'),
+        axis.text = element_text(size = 12),
+        legend.position="none",
+        strip.background = element_blank(),
+        strip.text.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_18.png"), gg, width=9, height=7, units = "in", dpi=366)
+
+# Pregunta 19 ----------------------------------------------------------
+Pr9 <- db %>% dplyr::select(Q14)
+Pr9 %>% glimpse
+
+docs <- Corpus(VectorSource(Pr9))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_14.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=500, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
+# Pregunta 20 -------------------------------------------------------------
+Pr9 <- db %>% dplyr::select(Q15)
+Pr9 %>% glimpse
+
+docs <- Corpus(VectorSource(Pr9))
+inspect(docs)
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convertir a letras minúsculas el texto.
+docs <- tm_map(docs, content_transformer(tolower))
+# Remover números
+docs <- tm_map(docs, removeNumbers)
+# Remover stopwords comunes
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
+# remover signos de puntuación
+docs <- tm_map(docs, removePunctuation)
+# Eliminar espacios en blanco extras.
+docs <- tm_map(docs, stripWhitespace)
+#crear matriz documento de términos
+dtm <- TermDocumentMatrix(docs)
+matriz <- as.matrix(dtm)
+# ordenar filas de la matriz en orden descendente
+v <- sort(rowSums(matriz),decreasing=TRUE)
+# convertir a data frame
+d <- data.frame(word = names(v),freq=v)
+# mostrar los primeros 10 términos que más se repiten
+head(d, 10)
+write.csv(d, paste0(root,prj,"/3.Results/Pregunta_14.csv"))
+#
+set.seed(4321)
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
+          max.words=500, random.order=F, rot.per=0.1, 
+          colors=brewer.pal(8, "Paired"),
+          family="serif")
+
+# Pregunta 21 -------------------------------------------------------------
+Pr21 <- db %>% dplyr::select(Q16_1:Q16_11)
+Pr21 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr21 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr21)) %>% 
   tidyr::drop_na()
 #
 gg <- fqTable %>%
@@ -920,7 +849,7 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_20.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_26.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 
 # Pregunta 26 -------------------------------------------------------------
