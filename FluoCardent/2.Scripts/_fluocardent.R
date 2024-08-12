@@ -836,7 +836,6 @@ fqTable <- fqTable %>%
 #
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
   geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
   # scale_y_continuous(expand = expansion()) +
