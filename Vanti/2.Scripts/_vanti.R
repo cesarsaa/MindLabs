@@ -34,16 +34,16 @@ gg <- db %>%
   dplyr::group_by(Estrato, Marca_alguna_opción) %>%
   dplyr::count(valores_grupos) %>% 
   dplyr::mutate(Por = (prop.table(n)*100)) %>% 
-  ggplot2::ggplot(aes(x = interaction(valores_grupos, Marca_alguna_opción, sep = "&"), y = Por, fill = Estrato)) +
+  ggplot2::ggplot(aes(x = interaction(valores_grupos, Marca_alguna_opción, sep = "&"), y = n, fill = Estrato)) +
   ggplot2::geom_col(position = position_dodge2(preserve = "single")) + 
-  ggplot2::geom_text(aes(label = paste0(round(Por,2),"%")),
+  ggplot2::geom_text(aes(label = paste0(round(n,2),"")),
                      position=position_dodge(width=0.9), size = 4, vjust= -0.5) +
   ggplot2::labs(title = " ",
                 x = " ",
                 y = " ",
                 fill = " ") +
   # ggplot2::coord_flip() +
-  # theme_ggcharts() +
+  theme_void() +
   ggplot2::scale_fill_brewer(palette = "Paired") +
   ggplot2::scale_x_discrete(guide = guide_axis_nested(delim = "&")) +
   ggplot2::theme(axis.text.x = element_text(angle = 0, vjust = 1, hjust=0.5),
@@ -65,16 +65,16 @@ gg <- db %>% dplyr::filter(., Marca_alguna_opción == "Triángulo") %>%
   dplyr::count(Si_18.990) %>% 
   dplyr::mutate(Por = (prop.table(n)*100)) %>% 
   ggplot2::ggplot(aes(x = interaction(Si_18.990, Marca_alguna_opción, sep = "&"), 
-                      y = Por, fill = Estrato)) +
+                      y = n, fill = Estrato)) +
   ggplot2::geom_col(position = position_dodge2(preserve = "single")) + 
-  ggplot2::geom_text(aes(label = paste0(round(Por,2),"%")),
+  ggplot2::geom_text(aes(label = paste0(round(n,2),"")),
                      position=position_dodge(width=0.9), size = 4, vjust= -0.5) +
   ggplot2::labs(title = "Si este seguro tuviera un precio de $18.990 ¿estarías dispuesto(a) a pagarlo?",
                 x = " ",
                 y = " ",
                 fill = " ") +
   # ggplot2::coord_flip() +
-  # theme_ggcharts() +
+  theme_void() +
   ggplot2::scale_fill_brewer(palette = "Paired") +
   ggplot2::scale_x_discrete(guide = guide_axis_nested(delim = "&")) +
   ggplot2::theme(axis.text.x = element_text(angle = 0, vjust = 1, hjust=0.5),
@@ -96,16 +96,16 @@ gg <- db %>% dplyr::filter(., Marca_alguna_opción == "Cuadrado") %>%
   dplyr::count(Si_21.990) %>% 
   dplyr::mutate(Por = (prop.table(n)*100)) %>% 
   ggplot2::ggplot(aes(x = interaction(Si_21.990, Marca_alguna_opción, sep = "&"), 
-                      y = Por, fill = Estrato)) +
+                      y = n, fill = Estrato)) +
   ggplot2::geom_col(position = position_dodge2(preserve = "single")) + 
-  ggplot2::geom_text(aes(label = paste0(round(Por,2),"%")),
+  ggplot2::geom_text(aes(label = paste0(round(n,2),"")),
                      position=position_dodge(width=0.9), size = 4, vjust= -0.5) +
   ggplot2::labs(title = "Si este seguro tuviera un precio de $21.990 ¿estarías dispuesto(a) a pagarlo?",
                 x = " ",
                 y = " ",
                 fill = " ") +
   # ggplot2::coord_flip() +
-  # theme_ggcharts() +
+  theme_void() +
   ggplot2::scale_fill_brewer(palette = "Paired") +
   ggplot2::scale_x_discrete(guide = guide_axis_nested(delim = "&")) +
   ggplot2::theme(axis.text.x = element_text(angle = 0, vjust = 1, hjust=0.5),
@@ -127,16 +127,16 @@ gg <- db %>% dplyr::filter(., Marca_alguna_opción == "Círculo") %>%
   dplyr::count(Si_29.990) %>% 
   dplyr::mutate(Por = (prop.table(n)*100)) %>% 
   ggplot2::ggplot(aes(x = interaction(Si_29.990, Marca_alguna_opción, sep = "&"), 
-                      y = Por, fill = Estrato)) +
+                      y = n, fill = Estrato)) +
   ggplot2::geom_col(position = position_dodge2(preserve = "single")) + 
-  ggplot2::geom_text(aes(label = paste0(round(Por,2),"%")),
+  ggplot2::geom_text(aes(label = paste0(round(n,2),"")),
                      position=position_dodge(width=0.9), size = 4, vjust= -0.5) +
   ggplot2::labs(title = "Si este seguro tuviera un precio de $29.990 ¿estarías dispuesto(a) a pagarlo?",
                 x = " ",
                 y = " ",
                 fill = " ") +
   # ggplot2::coord_flip() +
-  # theme_ggcharts() +
+  theme_void() +
   ggplot2::scale_fill_brewer(palette = "Paired") +
   ggplot2::scale_x_discrete(guide = guide_axis_nested(delim = "&")) +
   ggplot2::theme(axis.text.x = element_text(angle = 0, vjust = 1, hjust=0.5),
@@ -158,16 +158,16 @@ gg <- db %>% dplyr::filter(., Marca_alguna_opción == "Rombo") %>%
   dplyr::count(Si_32.990) %>% 
   dplyr::mutate(Por = (prop.table(n)*100)) %>% 
   ggplot2::ggplot(aes(x = interaction(Si_32.990, Marca_alguna_opción, sep = "&"), 
-                      y = Por, fill = Estrato)) +
+                      y = n, fill = Estrato)) +
   ggplot2::geom_col(position = position_dodge2(preserve = "single")) + 
-  ggplot2::geom_text(aes(label = paste0(round(Por,2),"%")),
+  ggplot2::geom_text(aes(label = paste0(round(n,2),"")),
                      position=position_dodge(width=0.9), size = 4, vjust= -0.5) +
   ggplot2::labs(title = "Si este seguro tuviera un precio de $32.990 ¿estarías dispuesto(a) a pagarlo?",
                 x = " ",
                 y = " ",
                 fill = " ") +
   # ggplot2::coord_flip() +
-  # theme_ggcharts() +
+  theme_void() +
   ggplot2::scale_fill_brewer(palette = "Paired") +
   ggplot2::scale_x_discrete(guide = guide_axis_nested(delim = "&")) +
   ggplot2::theme(axis.text.x = element_text(angle = 0, vjust = 1, hjust=0.5),

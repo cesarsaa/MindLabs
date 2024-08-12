@@ -537,7 +537,6 @@ db <- db %>% dplyr::mutate(P61_8 = dplyr::case_when(P61_8	%in% c("Sí")	~	"Publi
                                                     TRUE ~ NA))
 # Analisis descriptivo ----------------------------------------------------
 db <- db %>% dplyr::filter(., SEL != 1)
-
 # Pregunta  -------------------------------------------------------------
 Pr0 <- db %>% dplyr::select(SEL)
 Pr0 %>% glimpse
@@ -908,7 +907,7 @@ fqTable <- fqTable %>%
   dplyr::group_by(Variable) %>% 
   tidyr::drop_na()
 #
-write.csv(Pr17, paste0(root,prj,"/3.Results/Pregunta_17.csv"))
+write.csv(fqTable, paste0(root,prj,"/3.Results/Pregunta_17.csv"))
 # Pregunta 18-19 ----------------------------------------------------------
 Pr <- db %>% dplyr::select(P18,P19)
 Pr %>% glimpse
@@ -1203,6 +1202,13 @@ fqTable$Categoria <- factor(fqTable$Categoria, levels = c("1 - Definitivamente n
                                                           "2","3","4","5",
                                                           "6","7","8","9",
                                                           "10 - Totalmente lo recomendaría"), ordered = T)
+# 0 a 6 detractores
+dtr <- ((0.017766497) + (0.005076142) + (0.015228426) + (0.010152284) + (0.058375635) + (0.030456853))*100
+# 7 a 8 pasivos
+# 9 a 10 promotores
+pro <- ((0.195431472) + (0.408629442))*100
+NPS <- (pro - dtr)
+
 #
 lvl <- c("1 - Definitivamente no lo recomendaría",
          "2","3","4","5",
@@ -1525,12 +1531,46 @@ ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_38.png"), gg, width=15, hei
 Pr <- db %>% dplyr::select(P39,P40,P42:P45)
 Pr %>% glimpse
 
+#
+Pr <- Pr %>% dplyr::mutate(P39 = dplyr::case_when(P39	%in% c("Excelente")	~	5,
+                                                 P39	%in% c("Buena")	~	4,
+                                                 P39	%in% c("Regular")	~	3,
+                                                 P39	%in% c("Mala")	~	2,
+                                                 P39	%in% c("Muy mala")	~	1),
+                           P40 = dplyr::case_when(P40	%in% c("Excelente")	~	5,
+                                                  P40	%in% c("Buena")	~	4,
+                                                  P40	%in% c("Regular")	~	3,
+                                                  P40	%in% c("Mala")	~	2,
+                                                  P40	%in% c("Muy mala")	~	1),
+                           P42 = dplyr::case_when(P42	%in% c("Excelente")	~	5,
+                                                  P42	%in% c("Buena")	~	4,
+                                                  P42	%in% c("Regular")	~	3,
+                                                  P42	%in% c("Mala")	~	2,
+                                                  P42	%in% c("Muy mala")	~	1),
+                           P43 = dplyr::case_when(P43	%in% c("Excelente")	~	5,
+                                                  P43	%in% c("Buena")	~	4,
+                                                  P43	%in% c("Regular")	~	3,
+                                                  P43	%in% c("Mala")	~	2,
+                                                  P43	%in% c("Muy mala")	~	1),
+                           P44 = dplyr::case_when(P44	%in% c("Excelente")	~	5,
+                                                  P44	%in% c("Buena")	~	4,
+                                                  P44	%in% c("Regular")	~	3,
+                                                  P44	%in% c("Mala")	~	2,
+                                                  P44	%in% c("Muy mala")	~	1),
+                           P45 = dplyr::case_when(P45	%in% c("Excelente")	~	5,
+                                                  P45	%in% c("Buena")	~	4,
+                                                  P45	%in% c("Regular")	~	3,
+                                                  P45	%in% c("Mala")	~	2,
+                                                  P45	%in% c("Muy mala")	~	1))
+
+#
 names(Pr) <- c("Cómo calificaría la accesibilidad de Unicentro\nen términos de salidas y entradas",
                "Cómo calificaría las zonas verdes y la comodidad\nde las instalaciones",
                "Cómo calificaría la\nambientación y decoración",
                "Cómo calificaría la seguridad",
                "Cómo calificaría la limpieza",
                "Cómo calificaría las\nactividades y eventos que")
+
 
 # Analisis descriptivo
 fqTable <- Pr %>%
@@ -1544,20 +1584,22 @@ fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Excelente",
                                                           "Regular",
                                                           "Mala",
                                                           "Muy mala"), ordered = T)
-lvl <- c("Excelente",
-         "Buena",
-         "Regular",
-         "Mala",
-         "Muy mala")
+fqTable$Categoria <- as.factor(fqTable$Categoria)
+
+lvl <- c("5",
+         "4",
+         "3",
+         "2",
+         "1")
 # 
-gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
+gg <- fqTable %>% ggplot(aes(x = Categoria, y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
   geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
-  scale_fill_brewer(palette="RdYlGn", direction = -1)+
+  scale_fill_brewer(palette="RdYlGn", direction = 1)+
   scale_y_continuous(limits = c(0, 100)) +
   facet_wrap(~ Variable, ) +
   theme_ggcharts() +
@@ -1567,7 +1609,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         axis.text = element_text(size = 12),
         legend.position="none")
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_39-45.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_39-45A.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # Pregunta 41 -------------------------------------------------------------
 Pr41 <- db %>% dplyr::select(P41)
@@ -2075,6 +2117,7 @@ gg <- fqTable %>%
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_61.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # wordcloud ---------------------------------------------------------------
+library(tm)
 library(wordcloud)
 library(RColorBrewer)
 #
