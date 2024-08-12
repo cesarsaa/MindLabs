@@ -1335,7 +1335,7 @@ gg <- fqTable %>%
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_37.png"), gg, width=13, height=7, units = "in", dpi=366)
 
 # Pregunta 38 -------------------------------------------------------------
-Pr38 <- db %>% dplyr::select(P38_1:P38_7)
+Pr38 <- db %>% dplyr::select(Q33)
 Pr38 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr38 %>%
@@ -1349,8 +1349,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1360,8 +1360,39 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_38.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_38.png"), gg, width=20, height=12, units = "in", dpi=366)
 
+# Pregunta 39 -------------------------------------------------------------
+Pr39 <- db %>% dplyr::select(Q34_1:Q34_7)
+Pr39 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr39 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr39)) %>% 
+  tidyr::drop_na()
+#
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_39.png"), gg, width=20, height=12, units = "in", dpi=366)
+
+# Pregunta 39 -------------------------------------------------------------
+Pr40 <- db %>% dplyr::select(Q35)
+write.csv(Pr40, paste0(root,prj,"/3.Results/Pregunta_40.csv"))
 # Pregunta --------------------------------------------------------------
 Pr <- db %>% dplyr::select(P39,P40,P42:P45)
 Pr %>% glimpse
@@ -1410,7 +1441,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_39-45.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # Pregunta 41 -------------------------------------------------------------
-Pr41 <- db %>% dplyr::select(P41)
+Pr41 <- db %>% dplyr::select(Q36_1:Q36_5)
 Pr41 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr41 %>%
@@ -1418,33 +1449,62 @@ fqTable <- Pr41 %>%
   count(measure, value)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr41)) 
-fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Muy agradable",
-                                                          "Agradable",
-                                                          "Neutral",
-                                                          "Desagradable",
-                                                          "Muy desagradable"), ordered = T)
-lvl <- c("Muy agradable",
-         "Agradable",
-         "Neutral",
-         "Desagradable",
-         "Muy desagradable")
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr41)) %>% drop_na()
+
 #
-gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_41.png"), gg, width=15, height=7, units = "in", dpi=366)
+
+
+# Pregunta 42 -------------------------------------------------------------
+Pr42 <- db %>% dplyr::select(Q37)
+Pr42 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr42 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr42)) 
+fqTable$Categoria <- factor(fqTable$Categoria, levels = c("1",
+                                                          "2",
+                                                          "3",
+                                                          "4",
+                                                          "5"), ordered = T)
+lvl <- c("1",
+         "2",
+         "3",
+         "4",
+         "5")
+# 
+gg <- fqTable %>% ggplot(aes(x = ((Categoria)), y = Porcentaje*100, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
-  scale_fill_brewer(palette="RdYlGn", direction = -1)+
+  scale_fill_brewer(palette="RdYlGn", direction = 1)+
   scale_y_continuous(limits = c(0, 100)) +
-  facet_wrap(~ Variable, ) +
+  # facet_wrap(~ Variable, ) +
   theme_ggcharts() +
   theme(strip.text = element_text(size = 12, face = "bold"),
         axis.title.x = element_text(size = 13, face = 'bold'),
         axis.title.y = element_text(size = 13, face = 'bold'),
         axis.text = element_text(size = 12),
-        legend.position="bottom",
+        legend.position="none",
         # panel.background = element_rect(fill = "white",
         #                                 colour = "white",
         #                                 size = 0.5,
@@ -1452,8 +1512,35 @@ gg <- fqTable %>% ggplot(aes(x = reorder(factor(Categoria, level=lvl), +Porcenta
         strip.background = element_blank(),
         strip.text.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_41.png"), gg, width=15, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_42.png"), gg, width=15, height=7, units = "in", dpi=366)
 
+# Pregunta 43 -------------------------------------------------------------
+Pr43 <- db %>% dplyr::select(Q38_1:Q38_4)
+Pr43 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr43 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr43)) %>% drop_na()
+
+#
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_43.png"), gg, width=20, height=12, units = "in", dpi=366)
 
 # Pregunta 44 -------------------------------------------------------------
 Pr44 <- db %>% dplyr::select(Q39)
@@ -1581,7 +1668,7 @@ gg <- fqTable %>%
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_47.png"), gg, width=15, height=7, units = "in", dpi=366)
 # Pregunta 48 --------------------------------------------------------------
-Pr48 <- db %>% dplyr::select(P48)
+Pr48 <- db %>% dplyr::select(Q43_1:Q43_12)
 Pr48 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr48 %>%
@@ -1592,25 +1679,24 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr48)) %>% 
   tidyr::drop_na()
 #
-df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
-gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
-  geom_col(width = 1, color = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
-  geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
-                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
-  guides(fill = guide_legend(title =" ")) +
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_48.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_48.png"), gg, width=20, height=12, units = "in", dpi=366)
 rm(df2)
 # Pregunta 49 -------------------------------------------------------------
-Pr49 <- db %>% dplyr::select(P49_1:P49_9)
+Pr49 <- db %>% dplyr::select(Q44)
 Pr49 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr49 %>%
@@ -1624,8 +1710,8 @@ fqTable <- fqTable %>%
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1638,7 +1724,7 @@ gg <- fqTable %>%
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_49.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # Pregunta 50 -------------------------------------------------------------
-Pr50 <- db %>% dplyr::select(P50)
+Pr50 <- db %>% dplyr::select(Q45_1:Q45_7)
 Pr50 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr50 %>%
@@ -1650,10 +1736,10 @@ fqTable <- fqTable %>%
   tidyr::drop_na()
 #
 gg <- fqTable %>%
-  # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
@@ -1665,9 +1751,8 @@ gg <- fqTable %>%
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_50.png"), gg, width=15, height=7, units = "in", dpi=366)
 
-# Evaluacion de publicidad ------------------------------------------------
 # Pregunta 51 -------------------------------------------------------------
-Pr51 <- db %>% dplyr::select(P51)
+Pr51 <- db %>% dplyr::select(Q46)
 Pr51 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr51 %>%
@@ -1678,30 +1763,25 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr51)) %>% 
   tidyr::drop_na()
 #
-df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
+gg <- fqTable %>% dplyr::filter(., Categoria != "${q://QID55/ChoiceTextEntryValue/7}") %>% 
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
-gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
-  geom_col(width = 1, color = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
-  geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
-                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
-  guides(fill = guide_legend(title =" ")) +
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_51.png"), gg, width=9, height=7, units = "in", dpi=366)
-rm(df2)
-
-
-
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_51.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 
 # Pregunta 52 -------------------------------------------------------------
-Pr52 <- db %>% dplyr::select(P52)
+Pr52 <- db %>% dplyr::select(Q47)
 Pr52 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr52 %>%
@@ -1722,7 +1802,7 @@ gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria)
   coord_polar(theta = "y") +
   scale_fill_brewer(palette = "Set1") +
   geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
+                   aes(y = pos, label = paste0(round(Porcentaje*100,2), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
@@ -1731,7 +1811,7 @@ ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_52.png"), gg, width=9, heig
 rm(df2)
 
 # Pregunta 53 -------------------------------------------------------------
-Pr53 <- db %>% dplyr::select(P53_1:P53_6)
+Pr53 <- db %>% dplyr::select(Q48_1:Q48_7)
 Pr53 %>% glimpse
 # Analisis descriptivo
 fqTable <- Pr53 %>%
@@ -1742,10 +1822,10 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr53)) %>% 
   tidyr::drop_na()
 #
-gg <- fqTable %>%
+gg <- fqTable %>% 
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
+  # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -1757,240 +1837,3 @@ gg <- fqTable %>%
         axis.ticks.x = element_blank())
 
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_53.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-
-
-
-
-# Pregunta 54 -------------------------------------------------------------
-Pr54 <- db %>% dplyr::select(P54_1:P54_5)
-Pr54 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr54 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr54)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_54.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-# Pregunta 55 -------------------------------------------------------------
-Pr55 <- db %>% dplyr::select(P55)
-Pr55 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr55 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr55)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_55.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-# Pregunta 56 -------------------------------------------------------------
-Pr56 <- db %>% dplyr::select(P56)
-Pr56 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr56 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr56)) %>% 
-  tidyr::drop_na()
-#
-df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
-
-gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
-  geom_col(width = 1, color = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
-  geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
-                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
-  guides(fill = guide_legend(title =" ")) +
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_56.png"), gg, width=9, height=7, units = "in", dpi=366)
-rm(df2)
-# Pregunta 57 -------------------------------------------------------------
-Pr57 <- db %>% dplyr::select(P57_1:P57_6)
-Pr57 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr57 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr57)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  # geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_57.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-# Pregunta 58 -------------------------------------------------------------
-Pr58 <- db %>% dplyr::select(P58_1:P58_7)
-Pr58 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr58 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr58)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_58.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-# Pregunta 59 -------------------------------------------------------------
-Pr59 <- db %>% dplyr::select(P59)
-Pr59 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr59 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr59)) %>% 
-  tidyr::drop_na()
-#
-df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
-
-gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
-  geom_col(width = 1, color = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
-  geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
-                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
-  guides(fill = guide_legend(title =" ")) +
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_59.png"), gg, width=9, height=7, units = "in", dpi=366)
-rm(df2)
-# Pregunta 60 -------------------------------------------------------------
-Pr60 <- db %>% dplyr::select(P60)
-Pr60 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr60 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr60)) %>% 
-  tidyr::drop_na()
-#
-df2 <- fqTable %>% 
-  mutate(csum = rev(cumsum(rev(Porcentaje))), 
-         pos = Porcentaje/2 + lead(csum, 1),
-         pos = if_else(is.na(pos), Porcentaje/2, pos))
-
-gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
-  geom_col(width = 1, color = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
-  geom_label_repel(data = df2,
-                   aes(y = pos, label = paste0(Porcentaje*100, "%")),
-                   size = 5.5, nudge_x = 1, show.legend = FALSE) +
-  guides(fill = guide_legend(title =" ")) +
-  theme_void()
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_60.png"), gg, width=9, height=7, units = "in", dpi=366)
-rm(df2)
-# Pregunta 61 -------------------------------------------------------------
-Pr61 <- db %>% dplyr::select(P61_1:P61_8)
-Pr61 %>% glimpse
-# Analisis descriptivo
-fqTable <- Pr61 %>%
-  gather(measure, value) %>%
-  count(measure, value)
-names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
-fqTable <- fqTable %>% 
-  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr61)) %>% 
-  tidyr::drop_na()
-#
-gg <- fqTable %>%
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
-  # bar_chart(Categoria, Porcentaje, highlight = c("Si, después de 3 horas","Las primeras 3 horas son gratis"), bar_color = c("steelblue","orange")) +
-  geom_label(aes(label = paste0(Porcentaje*100,"%"), hjust = 1.2)) +
-  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
-  labs(x = NULL,
-       y = "Porcentaje (%)",
-       title = " ",
-       subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
-
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_61.png"), gg, width=15, height=7, units = "in", dpi=366)
-
-# wordcloud ---------------------------------------------------------------
-
-# -------------------------------------------------------------------------
-
-
