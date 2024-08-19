@@ -14,19 +14,71 @@ suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, foreign, ggcharts, mdthem
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
 prj <- "Cajas_compensacion"
 # Lectura de datos --------------------------------------------------------
-db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Estudio_de_cajas_de_compensacion_MindLabs_25 de julio de 2024_Base_Final_Turismo.sav"),
+db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Base_Final(1)_Recreacion.sav"),
                          use.value.labels = T,
                          to.data.frame = T)
 head(db)
+# -------------------------------------------------------------------------
+Pr <- db %>% dplyr::select(Q14_1:Q14_8)
+Pr %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr))*100) %>% 
+  tidyr::drop_na()
+fqTable
 
-# analisis exploratorio ---------------------------------------------------
-# Q1
-pr1 <- db %>% dplyr::select(Q1,Q9)
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+  geom_label(aes(label = paste0(round(Porcentaje,2),"%"), hjust = 1.2)) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  # scale_y_continuous(expand = expansion()) +
+  labs(x = NULL,
+       y = "Porcentaje (%)",
+       title = " ",
+       subtitle = " ",
+       caption = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_11.png"), gg, width=15, height=7, units = "in", dpi=366)
+# -------------------------------------------------------------------------
+pr1 <- db %>% dplyr::filter(., Q5 == "3") %>% 
+  dplyr::select(Q6_1:Q6_5)
 pr1 %>% glimpse
 # Analisis descriptivo
 fqTable <- pr1 %>%
-  group_by(., Q9) %>% 
-  count(., Q1)
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = (Frecuencia/nrow(pr1))*100) %>% 
+  tidyr::drop_na()
+fqTable
+# -------------------------------------------------------------------------
+Pr <- db %>% dplyr::select(Q4,Q17_1:Q17_9)
+Pr %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr %>%
+  pivot_longer(cols = Q17_1:Q17_9, names_to = "measure", values_to = "value") %>%
+  group_by(Q4, measure, value) %>%
+  count()
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = (n/nrow(Pr))*100) %>% 
+  tidyr::drop_na()
+
+# analisis exploratorio ---------------------------------------------------4
+pr1 <- db %>% dplyr::select(Q4,Q17_1)
+pr1 %>% glimpse
+# Analisis descriptivo
+fqTable <- pr1 %>%
+  group_by(., Q4) %>%
+  count(., Q17_1)
 names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
   dplyr::mutate(Porcentaje = Frecuencia/nrow(pr1)) %>% 

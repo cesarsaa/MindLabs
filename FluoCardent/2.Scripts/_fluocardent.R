@@ -134,7 +134,7 @@ Pr3 %>% glimpse
 
 # Analisis descriptivo
 fqTable <- Pr3 %>% 
-  group_by(., GENDER) %>% 
+  # group_by(., GENDER) %>% 
   count(AGE_RANGE) %>% 
   dplyr::mutate(Porcentaje = (prop.table(n)*100))
 
@@ -172,6 +172,15 @@ names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable %>% 
   dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr6))*100) %>% 
   tidyr::drop_na()
+
+gg <- fqTable %>%
+  lollipop_chart(x = Categoria, y = Porcentaje) +
+  geom_text(aes(label = paste0(round(Porcentaje,2),"%"), hjust = 1.2, vjust = -1), color = "black") +
+  labs(x = NULL,
+       y = " ",
+       title = " ") +
+  scale_y_continuous(labels = function(x) paste0(x, "%"),
+                     expand = expansion(mult = c(0, .05)))
 
 gg <- fqTable %>%
   bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
@@ -335,7 +344,7 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr11)) %>% 
   tidyr::drop_na()
 #
-gg <- fqTable %>%
+gg <- fqTable %>% dplyr::filter(., Categoria != "${q://QID11/ChoiceTextEntryValue/8}") %>% 
   # bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
   bar_chart(Categoria, Porcentaje, highlight = c("Fluocardent  "), bar_color = c("steelblue")) +
   geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
@@ -350,7 +359,7 @@ gg <- fqTable %>%
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_11.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_11.png"), gg, width=15, height=7, units = "in", dpi=366)
 
 # Pregunta 12 --------------------------------------------------------------
 Pr12 <- db %>% dplyr::select(Q6)
