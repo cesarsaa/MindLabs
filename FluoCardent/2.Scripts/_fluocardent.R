@@ -198,7 +198,8 @@ gg <- fqTable %>%
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_6.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 7 --------------------------------------------------------------
-Pr7 <- db %>% dplyr::select(Q1_1,Q1_2,Q1_3)
+# Top of mind
+Pr7 <- db %>% dplyr::select(Q1_1) #Q1_1,Q1_2,Q1_3
 Pr7 %>% glimpse
 
 docs <- Corpus(VectorSource(Pr7))
@@ -209,7 +210,6 @@ toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
 docs <- tm_map(docs, toSpace, "/")
 docs <- tm_map(docs, toSpace, "@")
 docs <- tm_map(docs, toSpace, "\\|")
-
 # Convertir a letras minúsculas el texto.
 docs <- tm_map(docs, content_transformer(tolower))
 # Remover números
@@ -232,8 +232,8 @@ head(d, 10)
 write.csv(d, paste0(root,prj,"/3.Results/Pregunta_7.csv"))
 #
 set.seed(4321)
-wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 2,
-          max.words=50, random.order=F, rot.per=0.1, 
+wordcloud(words = d$word, freq = d$freq, scale = , min.freq = 1,
+          max.words=500, random.order=F, rot.per=0.1, 
           colors=brewer.pal(8, "Paired"),
           family="serif")
 

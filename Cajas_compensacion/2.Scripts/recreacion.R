@@ -20,7 +20,10 @@ db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Base_Recreacion.sav"),
 head(db)
 
 # -------------------------------------------------------------------------
-db %>% dplyr::count(., Q60) %>% drop_na() %>% dplyr::mutate(Porcentaje = prop.table(n)*100) 
+db %>% dplyr::count(., Q16) %>% drop_na() %>% dplyr::mutate(Porcentaje = prop.table(n)*100) 
+db %>% dplyr::filter(., Q9 == "Comfandi") %>% dplyr::count(., Q28) %>% drop_na() %>% dplyr::mutate(Porcentaje = prop.table(n)*100) 
+db %>% dplyr::count(., Q28) %>% drop_na() %>% dplyr::mutate(Porcentaje = prop.table(n)*100) 
+db %>% dplyr::count(., Q29) %>% drop_na() %>% dplyr::mutate(Porcentaje = prop.table(n)*100) 
 db %>% dplyr::filter(.,Q45db %>% dplyr::filter(., Q4 == "Sí") %>% 
   dplyr::count(., Q28) %>% dplyr::mutate(Porcentaje = round(prop.table(n),3)*100)
 
@@ -39,10 +42,13 @@ pr %>% tidyr::pivot_longer(cols = Q17_1:Q17_9,
 
 # -------------------------------------------------------------------------
 Pr <- db %>% 
-  # dplyr::filter(., Q67 == "Sí") %>%
-  #dplyr::filter(., Q9 == "Comfandi") %>% 
-  dplyr::select(Q71_1:Q71_9)
+  # dplyr::filter(., Q43 == "Si, antes iba más frecuentemente") %>%
+  # dplyr::filter(., Q9 == "Comfandi") %>%
+  # dplyr::select(Q15_1, Q15_5:Q15_9)
+  dplyr::select(Q24_1:Q24_9)
+
 Pr %>% glimpse
+
 # Analisis descriptivo
 fqTable <- Pr %>%
   gather(measure, value) %>%
@@ -52,26 +58,24 @@ fqTable <- fqTable %>%
   dplyr::mutate(Porcentaje = (Frecuencia/nrow(Pr))*100) %>% 
   tidyr::drop_na()
 fqTable
-
-gg <- fqTable %>% 
-  bar_chart(Categoria, Porcentaje, bar_color = c("steelblue")) +
+# View(fqTable)
+gg <- fqTable %>%
+  bar_chart(Categoria, Porcentaje, bar_color = c("#1a70b7")) +
+  # bar_chart(Categoria, Porcentaje, highlight = "Comfandi Pance ", bar_color = c("#1f38b2")) +
   geom_label(aes(label = paste0(round(Porcentaje,1),"%"), hjust = 1.2)) +
   labs(x = NULL,
        y = "Porcentaje (%)",
        title = " ",
        subtitle = " ",
-       caption = " ") +
-  theme(axis.text.x = element_blank(),
-        axis.line.x = element_blank(),
-        axis.ticks.x = element_blank())
+       caption = " ")
 gg
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_29.png"), gg, width=20, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_14.png"), gg, width=15, height=12, units = "in", dpi=366)
 
 write.csv(fqTable, paste0(root,prj,"/3.Results/Pregunta_59.csv"), sep = ",")
 
 # -------------------------------------------------------------------------
 pr <- db %>% #dplyr::filter(., Q9 == "Comfandi") %>% 
-  dplyr::select(Q34_1:Q34_11,Q7)
+  dplyr::select(Q14_1, Q14_5:Q14_11)
 
 fqTable <- pr %>% tidyr::pivot_longer(cols = Q34_1:Q34_11,
                                       names_to = "measure",
@@ -82,7 +86,7 @@ fqTable <- pr %>% tidyr::pivot_longer(cols = Q34_1:Q34_11,
   dplyr::count(., value) %>% 
   dplyr::mutate(porcentaje = prop.table(n)*100)
 
-gg <- fqTable %>% dplyr::filter(., value != "Otros ¿Cuál?") %>% 
+gg <- fqTable %>% #dplyr::filter(., value != "Otros ¿Cuál?") %>% 
   ggplot(aes(x = reorder(value, +porcentaje), y = porcentaje, fill=Q7)) +
   geom_bar(stat="identity",show.legend = T, position = "dodge") + 
   geom_text(aes(value,porcentaje,label=paste0(round(porcentaje,2), "%"), 
@@ -105,20 +109,21 @@ ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_15.png"), gg, width=15, hei
 
 
 # -------------------------------------------------------------------------
-nb.cols <- 13
-mycolors <- colorRampPalette(brewer.pal(8, "Set3"))(nb.cols)
-
-gg <- fqTable %>% dplyr::filter(., Categoria != "Otro ¿Cuál?") %>%
+gg <- fqTable %>% slice_max(n=6, order_by = Porcentaje, with_ties = TRUE) %>% 
+  #dplyr::filter(., Categoria != "Otro ¿Cuál?") %>%
   ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F, position = "dodge") + 
-  geom_text(aes(Categoria,Porcentaje,label=paste0(round(Porcentaje,2), "%"), 
+  geom_text(aes(Categoria,Porcentaje,label=paste0(round(Porcentaje,2), "%"),
                 group=Categoria), position = position_dodge(width = 1), vjust = 0.5, hjust = -0.1, size=4) +
+  # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
-  scale_fill_brewer(palette="Paired",direction = 1, name = " ")+
+  scale_fill_manual(values = c("#1a70b7","#1a70b7","#1a70b7","#1a70b7","#1a70b7", "#1a70b7",
+                               "#1a70b7","#1a70b7","#1a70b7","#1a70b7", "#1a70b7")) +
+  # scale_fill_brewer(palette="Paired",direction = 1, name = " ") +
   # scale_fill_manual(values = mycolors, name = " ") +
-  scale_y_continuous(limits = c(0, 40)) +
+  # scale_y_continuous(limits = c(0, 40)) +
   theme_void() +
   theme(strip.text = element_text(size = 12, face = "bold", ),
         axis.title.x = element_text(size = 13, face = 'bold' ),
@@ -128,10 +133,10 @@ gg <- fqTable %>% dplyr::filter(., Categoria != "Otro ¿Cuál?") %>%
         strip.background = element_blank(),
         strip.text.x = element_blank())
 gg
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_70.png"), gg, width=10, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_24.png"), gg, width=14, height=7, units = "in", dpi=366)
 
 # -------------------------------------------------------------------------
-Pr3 <- db %>% dplyr::select(Q67)
+Pr3 <- db %>% dplyr::select(Q26_1:Q26_11)
 Pr3 %>% glimpse
 
 # Analisis descriptivo
@@ -152,14 +157,15 @@ df2 <- fqTable %>%
 gg <- ggplot(fqTable, aes(x = "" , y = Porcentaje, fill = fct_inorder(Categoria))) +
   geom_col(width = 1, color = 1) +
   coord_polar(theta = "y") +
-  scale_fill_brewer(palette = "Set1") +
+  # scale_fill_brewer(palette = "Set1") +
+  scale_fill_manual(values = c("#1a70b7","grey60","#a31116","#ff0000","#e24b37","#18a2f3")) +
   geom_label_repel(data = df2,
                    aes(y = pos, label = paste0(round(Porcentaje,1), "%")),
                    size = 5.5, nudge_x = 1, show.legend = FALSE) +
   guides(fill = guide_legend(title =" ")) +
   theme_void()
 gg
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_67.png"), gg, width=9, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_22.png"), gg, width=9, height=7, units = "in", dpi=366)
 rm(df2)  
 
 # -------------------------------------------------------------------------
