@@ -14,7 +14,7 @@ db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Estudio_de_cajas_de_com
 head(db)
 # -------------------------------------------------------------------------
 db <- db %>% dplyr::filter(., Q9 == "1") # Estas afiliado a alguna de estas cajas de compensación
-db <- db %>% dplyr::filter(., Q57 == "1") # Has viajado con los servicios de turismo con Comfandi?
+db <- db %>% dplyr::filter(., Q57 == "2") # Has viajado con los servicios de turismo con Comfandi?
 
 # I = ((r_1*w_1) + (r_2*w_2) + ... + (r_t*w_t)) / ((n* t))
 # w <- Peso de la escala
