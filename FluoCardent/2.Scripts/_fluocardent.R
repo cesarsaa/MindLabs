@@ -199,7 +199,7 @@ ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_6.png"), gg, width=9, heigh
 
 # Pregunta 7 --------------------------------------------------------------
 # Top of mind
-Pr7 <- db %>% dplyr::select(Q1_1) #Q1_1,Q1_2,Q1_3
+Pr7 <- db %>% dplyr::select(P5) #Q1_1,Q1_2,Q1_3
 Pr7 %>% glimpse
 
 docs <- Corpus(VectorSource(Pr7))

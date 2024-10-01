@@ -694,6 +694,7 @@ ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_8.png"), gg, width=9, heigh
 # Pregunta 9 --------------------------------------------------------------
 Pr9 <- db %>% dplyr::select(P9)
 Pr9 %>% glimpse
+Pr9 <- Pr9 %>% dplyr::filter(., P9 != "{P8_other.NAOK}") 
 # Analisis descriptivo
 fqTable <- Pr9 %>%
   gather(measure, value) %>%
@@ -706,8 +707,9 @@ fqTable <- fqTable %>%
 gg <- fqTable %>% dplyr::filter(., Categoria != "{P8_other.NAOK}") %>% 
   bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("steelblue")) +
   # bar_chart(Categoria, Porcentaje, highlight = c("Unicentro"), bar_color = c("#ee1b24")) +
-  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = 1.2)) +
+  geom_label(aes(label = paste0(round(Porcentaje*100,0),"%"), hjust = 1.2)) +
   # geom_text(aes(label = paste0(Porcentaje*100,"%"), hjust = "left"), color = "black") +
+  scale_y_continuous(limits = c(0, 0.3)) +
   # scale_y_continuous(expand = expansion()) +
   labs(x = NULL,
        y = "Porcentaje (%)",
@@ -717,7 +719,7 @@ gg <- fqTable %>% dplyr::filter(., Categoria != "{P8_other.NAOK}") %>%
   theme(axis.text.x = element_blank(),
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank())
-
+gg
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_9.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 # Pregunta 10 --------------------------------------------------------------
@@ -1337,7 +1339,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje
   # scale_fill_brewer(palette="RdBu")+
   scale_y_continuous(limits = c(0, 35)) +
   facet_grid(~ Variable, scales = "free") +
-  theme_ggcharts() +
+  # theme_ggcharts() +
   theme(strip.text = element_text(size = 12, face = "bold"),
         axis.title.x = element_text(size = 12, face = 'bold'),
         axis.title.y = element_text(size = 12, face = 'bold'),
@@ -1348,7 +1350,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje
                                         size = 0.5,
                                         linetype = "solid"))
 
-ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_33.png"), gg, width=17, height=7, units = "in", dpi=366)
+ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_33.pdf"), gg, width=17, height=7, units = "in", dpi=366)
 
 # Evaluacion de oferta, servicios, percepciones  --------------------------
 # Pregunta 34 --------------------------------------------------------------

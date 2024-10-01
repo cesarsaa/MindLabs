@@ -12,7 +12,7 @@ db <- foreign::read.spss(file = paste0(root,prj,"/1.Data/Estudio cremas dentales
                          use.value.labels = T,
                          to.data.frame = T)
 head(db)
-db <- db %>% dplyr::filter(., Q6 == "Fluocardent  ") #"Fluocardent  "
+db <- db %>% dplyr::filter(., Q6 != "Fluocardent  ") #"Fluocardent  "
 # -------------------------------------------------------------------------
 Pr <- db %>% dplyr::select(Q20_1:Q20_7)
 Pr %>% glimpse
