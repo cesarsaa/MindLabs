@@ -4,16 +4,16 @@ Bienvenido al repositorio oficial de **Mindlabs**, donde se centralizan todos lo
 
 ## Estructura del repositorio:
 
-- **Data**  
+- **1.Data**  
   Carpeta que contiene las bases de datos y recursos necesarios para los análisis. Aquí se almacenan tanto datos brutos como procesados.
 
-- **Scripts**  
+- **2.Scripts**  
   En esta carpeta se guardan los códigos en R que ejecutan los análisis de los proyectos. Incluye scripts para limpieza de datos, modelos estadísticos y visualización.
 
-- **Results**  
+- **3.Results**  
   Aquí se almacenan los resultados descriptivos, gráficos y tablas generados a partir de los análisis. Todo el material relevante para la interpretación de los proyectos se encuentra aquí.
 
-- **Documents**  
+- **4.Documents**  
   Esta carpeta contiene los informes y presentaciones de resultados. Incluye reportes técnicos, presentaciones ejecutivas y cualquier otro documento que resuma los hallazgos de cada proyecto.
 
 Este repositorio será actualizado continuamente con nuevos proyectos, mejoras en el código y resultados adicionales. ¡Esperamos que encuentres útil este espacio para seguir de cerca el progreso de Mindlabs!
