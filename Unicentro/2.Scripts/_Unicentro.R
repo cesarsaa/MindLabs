@@ -926,10 +926,10 @@ fqTable$Categoria <- factor(fqTable$Categoria, levels = c("Muy importante",
                                                           "Poco importante",
                                                           "Nada importante"), ordered = T)
 #
-gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje*100, fill=Categoria)) +
+gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje, fill=Categoria)) +
   geom_bar(stat="identity",show.legend = F) + 
   # geom_text(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left"), color = "black") +
-  geom_label(aes(label = paste0(round(Porcentaje*100,2),"%"), hjust = "left")) +
+  geom_label(aes(label = paste0(round(Porcentaje,2),"%"), hjust = "left")) +
   ggtitle("") +
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
@@ -948,7 +948,7 @@ gg <- fqTable %>% ggplot(aes(x = reorder(Categoria, +Porcentaje), y = Porcentaje
         #                                 linetype = "solid"),
         strip.background = element_blank(),
         strip.text.x = element_blank())
-
+gg
 ggplot2::ggsave(paste0(root,prj,"/3.Results/Pregunta_18-19.png"), gg, width=9, height=7, units = "in", dpi=366)
 
 
