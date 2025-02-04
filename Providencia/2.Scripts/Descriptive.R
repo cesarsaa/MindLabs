@@ -13,16 +13,21 @@ suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, ggh4x, ggrepel, foreign, 
 
 # Ruta de trabajo ---------------------------------------------------------
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
-prj <- "Providencia"
+prj <- "JGB_Chasis"
 # Lectura de datos --------------------------------------------------------
-db <- readxl::read_xlsx(paste0(root,prj,"/1.Data/Estudio_i_marca.xlsx"))
-db <- readxl::read_xlsx("/Users/cesara.saavedravanegas/Desktop/Estudio\ imagen\ de\ marca_2.xlsx")
+db <- readxl::read_xlsx(paste0("/Users/cesara.saavedravanegas/Downloads/Excel\ 3/Multivitaminico\ Pt.2.xlsx"))
+db <- readxl::read_xlsx(paste0("/Users/cesara.saavedravanegas/Downloads/Excel\ 4/Multivitaminico\ Pt.1.xlsx"))
+
+db <- readxl::read_xlsx(paste0("/Users/cesara.saavedravanegas/Downloads/Excel\ 6/pt1.xlsx"))
+
+# db <- readxl::read_xlsx("/Users/cesara.saavedravanegas/Desktop/Estudio\ imagen\ de\ marca_2.xlsx")
 head(db)
 
 # Demograficos ------------------------------------------------------------
 # Pregunta 1
-Pr <- db |> dplyr::select(p1)
+Pr <- db |> dplyr::select(p18)
 round(prop.table(table(Pr))*100,1)
+fqTable <- round(prop.table(table(Pr))*100,1)
 
 # Pregunta 2
 Pr <- db |> dplyr::select(p2)
@@ -45,7 +50,41 @@ Pr <- db |> dplyr::select(p12)
 round(prop.table(table(Pr))*100,1)
 
 # Pregunta 
-Pr <- db |> dplyr::select(p19)
+Pr <- db |> dplyr::select(p34)
+fqTable <- Pr %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable |> tidyr::drop_na() |> 
+  dplyr::mutate(Porcentaje = (Frecuencia/sum(Frecuencia))*100); fqTable
+
+
+Pr29 <- db %>% dplyr::select(`¿Con qué probabilidad recomendarías a tus familiares y amigos la Clínica Imbanaco como un centro de IPS?`)
+Pr29 %>% glimpse
+# Analisis descriptivo
+fqTable <- Pr29 %>%
+  gather(measure, value) %>%
+  count(measure, value)
+names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
+fqTable <- fqTable %>% 
+  dplyr::mutate(Porcentaje = Frecuencia/nrow(Pr29)) 
+fqTable$Categoria <- factor(fqTable$Categoria, levels = c("1",
+                                                          "2","3","4","5",
+                                                          "6","7","8","9",
+                                                          "10"), ordered = T)
+# 0 a 6 detractores
+dtr <- ((0.0132) + (0.0132) + (0.0526))*100
+# 7 a 8 pasivos
+psv <- ((0.0395) + (0.158))*100
+# 9 a 10 promotores
+pro <- ((0.316) + (0.395))*100
+NPS <- (pro - dtr)
+NPS
+
+# Pregunta 
+Pr <- db |> dplyr::select(p1, p57) |> 
+  dplyr::filter(p13 == "Color Crema/Amarillo claro") |> #Color rosado
+  dplyr::select(p31)                                    #Color Crema/Amarillo claro
 fqTable <- Pr %>%
   gather(measure, value) %>%
   count(measure, value)
@@ -54,9 +93,9 @@ fqTable <- fqTable |> tidyr::drop_na() |>
   dplyr::mutate(Porcentaje = (Frecuencia/sum(Frecuencia))*100); fqTable
 
 # Pregunta 
-Pr <- db |> dplyr::select(p14, p19) |> 
-  dplyr::filter(p14 == "Providencia") |> #Bogotá, Providencia, Mayagüez, Manuelita, RioPaila
-  dplyr::select(p19)
+Pr <- db |> dplyr::select(p1, p26) |> 
+  dplyr::filter(p1 == "Soy consumidor de otros multivitamínicos") |> #Color rosado
+  dplyr::select(p26)                                    #Color Crema/Amarillo claro
 fqTable <- Pr %>%
   gather(measure, value) %>%
   count(measure, value)
@@ -64,11 +103,11 @@ names(fqTable) <- c("Variable", "Categoria", "Frecuencia")
 fqTable <- fqTable |> tidyr::drop_na() |> 
   dplyr::mutate(Porcentaje = (Frecuencia/sum(Frecuencia))*100); fqTable
 # write.csv(fqTable, "data.csv")
-fqTable$Categoria <- gsub("https:.*", "", fqTable$Categoria)
+# fqTable$Categoria <- gsub("https:.*", "", fqTable$Categoria)
 
 # Pregunta 
-Pr <- db |> dplyr::select(p14,p1) |> 
-  dplyr::filter(p14 == "Manuelita") |> dplyr::select(p19) #Providencia
+Pr <- db |> dplyr::select(p5)
+  # dplyr::filter(p14 == "Manuelita") |> dplyr::select(p19) #Providencia
 fqTable <- Pr %>%
   gather(measure, value) %>%
   count(measure, value)

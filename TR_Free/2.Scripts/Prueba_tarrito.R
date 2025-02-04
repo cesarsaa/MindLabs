@@ -14,7 +14,7 @@ suppressMessages(pacman::p_load(dplyr, tidyr, ggplot2, ggh4x, ggrepel, foreign, 
 root <- "/Users/cesara.saavedravanegas/Documents/GitHub/MindLabs/"
 prj <- "TR_Free"
 # Lectura de datos --------------------------------------------------------
-db <- readxl::read_xlsx(paste0(root,prj,"/1.Data/prueba_TR.xlsx"))
+db <- readxl::read_xlsx(paste0("/Users/cesara.saavedravanegas/Downloads/Excel\ 4/Multivitaminico\ Pt.1.xlsx"))
 db <- readxl::read_xlsx(paste0(root,prj,"/1.Data/TR.xlsx"))
 
 # -------------------------------------------------------------------------
@@ -89,7 +89,7 @@ fqTable %>%
   coord_flip() +
   scale_y_continuous(limits = c(0, 70)) +
   scale_fill_brewer(palette="RdYlGn", name = " ", direction = 1) +
-  facet_wrap(~ Variable) +
+  # facet_wrap(~ Variable) +
   theme_bw() +
   theme(strip.text = element_text(face = "bold", color = "white", hjust = 0, size = 15),
         strip.background = element_rect(fill = "dodgerblue3", linetype = "solid",
@@ -172,7 +172,7 @@ fqTable %>%
   xlab("") + ylab("Porcentaje (%)") +
   coord_flip() +
   scale_y_continuous(limits = c(0, 90)) +
-  scale_fill_brewer(palette="RdYlGn", name = " ", direction = 1) +
+  scale_fill_brewer(palette="RdYlGn", name = " ", direction = -1) +
   facet_wrap(~ Variable) +
   theme_bw() +
   theme(strip.text = element_text(face = "bold", color = "white", hjust = 0, size = 15),
